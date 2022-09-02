@@ -6,13 +6,13 @@ pipeline{
     stages{
        stage('GetCode'){
             steps{
-                git 'https://github.com/vikramDevPrac/java-login-app.git'
+                git 'https://github.com/fallenmaverick/java-login-app.git'
             }
          }
    stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
-        withSonarQubeEnv('sonarqube-8.9.2') { 
+        withSonarQubeEnv('sonarqube-8.9.9') { 
         // If you have configured more than one global server connection, you can specify its name
 //      sh "${scannerHome}/bin/sonar-scanner"
         sh "mvn sonar:sonar"
@@ -40,7 +40,7 @@ pipeline{
         
 	stage('Deploy') {
       steps {   
-         deploy adapters: [tomcat8(credentialsId: 'deploy', path: '', url: 'http://3.110.134.168:8080')], contextPath: null, war: '**/**.war'
+         deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://3.110.86.225:8080/')], contextPath: null, war: '**/*.war'
       }
     }
        

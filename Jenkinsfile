@@ -1,7 +1,7 @@
 pipeline{
     agent any
 	environment{
-		mvn "Maven3"
+		maven "Maven3"
     }
     stages{
        stage('GetCode'){

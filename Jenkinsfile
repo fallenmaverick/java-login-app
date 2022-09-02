@@ -1,5 +1,8 @@
 pipeline{
-    agent any
+    agent {
+	node {
+	    label 'jenkins-slave'
+		
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
     }

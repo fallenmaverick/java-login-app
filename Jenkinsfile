@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        PATH = "/usr/bin/:$PATH"
+        PATH = "/usr/bin/mvn:$PATH"
     }
     stages{
        stage('GetCode'){

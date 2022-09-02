@@ -6,7 +6,7 @@ pipeline{
     stages{
        stage('GetCode'){
             steps{
-                git 'https://github.com/fallenmaverick/java-login-app.git'
+                git 'https://github.com/fallenmaverick/java-login.git'
             }
          }
    stage('SonarQube analysis') {

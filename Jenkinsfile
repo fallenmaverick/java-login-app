@@ -40,7 +40,7 @@ pipeline {
 			post {
 			    always {
               //  archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
-                junit allowEmptyResults: true, testResults: '/target/surefire-reports/TEST-*.xml''
+                junit allowEmptyResults: true, testResults: '/target/surefire-reports/TEST-*.xml'
                 }
             }
 	    }

@@ -3,12 +3,11 @@ pipeline{
     environment {
         PATH = "$PATH:/usr/bin/"
     }
+
     stages{
-       stage('GetCode'){
-            steps{
-                git 'https://github.com/fallenmaverick/java-login.git'
-            }
-        }        
+       stage('checkout'){
+	    checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fallenmaverick/java-login.git']]])
+	}
        stage('Build'){
             steps{
                 sh 'mvn clean package'

@@ -1,7 +1,9 @@
 pipeline{
-    agent any
-    environment {
-        PATH = "$PATH:/usr/share/maven/bin"
+    agent{
+        node{
+	lable: jenkins-slave
+        environment {
+        PATH = "$PATH:/usr/bin"
     }
     stages{
        stage('GetCode'){

@@ -1,37 +1,31 @@
 pipeline{
     agent any
-    environment{
-	    PATH = "/usr/bin:$PATH"
+    environment {
+        PATH = "$PATH:/usr/share/maven/bin"
     }
-       stages{
+    stages{
        stage('GetCode'){
             steps{
                 git 'https://github.com/fallenmaverick/java-login.git'
             }
-       }   
-	    
-       stage ('Build') {
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
-            }
-        stage('SonarQube analysis') {
-//    def scannerHome = tool 'SonarScanner 4.0';
+        }        
+       stage('Build'){
             steps{
-		 withSonarQubeEnv('sonarqube-8.9.2') { 
-		     sh "mvn sonar:sonar"
-    }
+                sh 'mvn clean package'
+            }
         }
+        stage('SonarQube analysis') {
+            steps{
+		        withSonarQubeEnv('sonarqube-8.9.9') { 
+                   sh "mvn sonar:sonar"
+            }       
         }
-	stage('Deploy') {
-	    steps {   
-                deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://3.108.194.173:8080/')], contextPath: null, war: '**/*.war'
+        
+        stage('Deploy') {
+            steps {
+                deploy adapters: [tomcat8(credentialsId: 'deploy', path: '', url: 'http://3.108.194.173:8080')], contextPath: null, war: '**/**.war'
+            }
         }
-    }
        
     }
 }

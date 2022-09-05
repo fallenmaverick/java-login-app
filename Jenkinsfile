@@ -1,25 +1,47 @@
-pipeline {
-    agent {
-        node {
-	    label 'jenkins-slave'
-        }
+pipeline{
+    agent any
+    environment {
+        PATH = "$PATH:/usr/share/maven/bin"
     }
-
     stages{
-       def mvnHome = tool 'Maven3'
-       stage('checkout'){
-	    checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fallenmaverick/java-login.git']]])
-	}
+       stage('GetCode'){
+            steps{
+                git 'https://github.com/fallenmaverick/java-login.git'
+            }
+         } 
+		stage('SonarQube analysis') {
+//    def scannerHome = tool 'SonarScanner 4.0.0';
+        steps{
+        withSonarQubeEnv('sonarqube-8.9.9') { 
+        // If you have configured more than one global server connection, you can specify its name
+//      sh "${scannerHome}/bin/sonar-scanner"
+        sh "mvn sonar:sonar"
+    }
+        }
+        } 
        stage('Build'){
             steps{
-                sh '"$(usr/bin/mvn clean install -f java-login/pom.xml'
+                sh 'mvn clean package'
             }
-        }
-        stage ('Code Quality scan')  {
-            withSonarQubeEnv('SonarQube') {
-            sh "${mvnHome}/bin/mvn sonar:sonar -f java-login/pom.xml"
-        }
-            }       
-        }       
-     }
+         }
+        stage('Test'){
+            steps{
+                sh 'mvn test'
+            }
+            post {
+                
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+         }
+		
+         stage('Deploy') {
+      steps {   
+         deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080')], contextPath: null, war: '**/*.war'
+    }
+    }
+       
+    }
 }
+

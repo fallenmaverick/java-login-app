@@ -30,12 +30,12 @@ pipeline {
         // Run the maven build
         sh '"mvn" -Dmaven.test.failure.ignore clean install'
       }
-	  post {
-        always {
-            xunit checksName: '', tools: [JUnit(excludesPattern: '', pattern: 'GIT_URL = https://github.com/fallenmaverick/java-login.git/pom.xml', stopProcessingIfError: true)]
-                }
-            }
-
+	}
+	
+	stage('Test'){
+	    steps {
+		xunit checksName: '', tools: [JUnit(excludesPattern: '', pattern: 'GIT_URL = https://github.com/fallenmaverick/java-login.git', stopProcessingIfError: true)]
+        }
     }
 	
 	  

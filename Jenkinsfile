@@ -35,17 +35,16 @@ pipeline {
 	stage('Test') {
             steps {
                 sh 'make test'
-
                 script {
                     def testResults = findFiles(glob: 'build/reports/**/*.xml')
                     for(xml in testResults) {
                         touch xml.getPath()
-                    
-                }
+						}
+                    }
             }
-        }
+        
     }
-
+	
     post {
         always {
             archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true

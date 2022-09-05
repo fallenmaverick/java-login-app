@@ -38,7 +38,7 @@ pipeline {
 		    sh '"mvn" -Dmaven.test.failure.ignore test'
 		    }
 			post {
-		    sh 'find . -name "TEST-*.xml" -exec touch {} \\;'
+		   // sh 'find . -name "TEST-*.xml" -exec touch {} \\;'
 		    junit '**/build/test-results/test/TEST-*.xml'
 		    }
 	    }

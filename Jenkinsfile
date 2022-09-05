@@ -1,49 +1,49 @@
 pipeline {
     agent any
-	tools {
-	    maven 'Maven'
     environment {
         PATH = "$PATH:/usr/bin"
+	    tools {
+	        maven 'Maven'
     }
     stages{
+        
        stage('GetCode'){
             steps{
-                git 'https://github.com/fallenmaverick/java-login.git'
+            git 'https://github.com/fallenmaverick/java-login.git'
             }
-         } 
-    stage('SonarQube analysis') {
+        } 
+        stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0.0';
-        steps{
-        withSonarQubeEnv('SonarQube') { 
-        // If you have configured more than one global server connection, you can specify its name
-//      sh "${scannerHome}/bin/sonar-scanner"
-        sh "mvn sonar:sonar -f java-login/pom.xml"
-    }
+            steps{
+            withSonarQubeEnv('SonarQube') { 
+// If you have configured more than one global server connection, you can specify its name
+            sh "${scannerHome}/bin/sonar-scanner"
+            sh "mvn sonar:sonar"
+            }
         }
         } 
        stage('Build'){
             steps{
-                sh 'mvn clean install'
+                sh 'mvn clean install -f java-login/pom.xml'
             }
-         }
-        stage('Test'){
+        }
+        
+        stage('Test') {
             steps{
                 sh 'mvn test'
             }
             post {
-                
                 success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
+                junit '**/target/surefire-reports/TEST-*.xml'
                 }
             }
-         }
+        }
 		
-         stage('Deploy') {
-      steps {   
-         deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080')], contextPath: null, war: '**/*.war'
-    }
-    }
+        stage('Deploy') {
+            steps {
+                deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080')], contextPath: null, war: '**/*.war'
+            }
+        }
        
     }
 }
-

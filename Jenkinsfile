@@ -37,10 +37,16 @@ pipeline {
       steps {
 
         sh '"mvn" -Dmaven.test.failure.ignore test'
-        junit 'tests/results/*.xml'
+       }
+        post {
+
+        always{
+
+          junit '**/target/surefire-reports/TEST-*.xml'
+
+        }
 
       }
-
       
 
     }

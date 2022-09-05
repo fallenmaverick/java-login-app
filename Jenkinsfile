@@ -9,7 +9,7 @@ pipeline{
                 git 'https://github.com/fallenmaverick/java-login.git'
             }
          } 
-		stage('SonarQube analysis') {
+    stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0.0';
         steps{
         withSonarQubeEnv('SonarQube') { 

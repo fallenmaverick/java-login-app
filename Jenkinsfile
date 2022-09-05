@@ -34,7 +34,7 @@ pipeline {
 	
 	stage('Test'){
 	    steps {
-		xunit checksName: '', tools: [JUnit(excludesPattern: '', pattern: 'GIT_URL = https://github.com/fallenmaverick/java-login.git', stopProcessingIfError: true)]
+		xunit checksName: '', tools: [JUnit(excludesPattern: '', stopProcessingIfError: true)]
         }
     }
 	

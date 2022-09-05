@@ -29,17 +29,17 @@ pipeline {
         stage('Build') {
             steps {
         // Run the maven build
-            sh '"mvn" -Dmaven.test.failure.ignore clean install'
+            sh '"mvn" -Dmaven.test.failure.ignore clean install -f java-login/pom.xml'
             }
 	    }
 	
 	    stage('Test') {
 	        steps {
-		    sh '"mvn" -Dmaven.test.failure.ignore test'
+		    sh '"mvn" -Dmaven.test.failure.ignore test -f java-login/pom.xml'
 		    }
 			post {
 			    always {
-                archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+              //  archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
                 junit '**/reports/TEST-*.xml'
                 }
             }

@@ -1,9 +1,7 @@
 pipeline {
     agent any
-    environment {
-        PATH = "$PATH:/usr/bin"
-	    tools {
-	        maven 'Maven'
+   	tools {
+	    maven 'Maven'
     }
     stages{
         

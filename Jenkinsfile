@@ -1,7 +1,8 @@
-pipeline{
-    agent any
-    environment {
-        PATH = "$PATH:/usr/bin/"
+pipeline {
+    agent {
+        node {
+          label 'jenkins-slave'
+        }
     }
 
     stages{

@@ -38,9 +38,11 @@ pipeline {
 		    sh '"mvn" -Dmaven.test.failure.ignore test'
 		    }
 			post {
-		   // sh 'find . -name "TEST-*.xml" -exec touch {} \\;'
-		    junit '**/build/test-results/test/TEST-*.xml'
-		    }
+			    always {
+                archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+                junit 'build/reports/**/*.xml'
+                }
+            }
 	    }
 	  
         stage('Deploy') {

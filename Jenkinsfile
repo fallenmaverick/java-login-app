@@ -8,46 +8,46 @@ pipeline {
 
     stages {
 //  Use this code for inline pipeline script option
-    stage('Code checkout') {
-        steps {
+        stage('Code checkout') {
+            steps {
         //download code from github
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fallenmaverick/jenkins-cicd-java-maven-demo.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fallenmaverick/jenkins-cicd-java-maven-demo.git']]])
         }
 
     }
-	stage('SonarQube analysis') {
+	    stage('SonarQube analysis') {
 //  Def scannerHome = tool 'SonarScanner 4.0.0';
-        steps{
-            withSonarQubeEnv('SonarQube') { 
+            steps{
+                withSonarQubeEnv('SonarQube') { 
 //  If you have configured more than one global server connection, you can specify its name
-//          sh "${scannerHome}/bin/sonar-scanner"
-            sh "mvn sonar:sonar"
+//              sh "${scannerHome}/bin/sonar-scanner"
+                sh "mvn sonar:sonar"
+                }
             }
         }
-    }
 	
-    stage('Build') {
-        steps {
+        stage('Build') {
+            steps {
         // Run the maven build
-        sh '"mvn" -Dmaven.test.failure.ignore clean install'
-        }
-	}
+            sh '"mvn" -Dmaven.test.failure.ignore clean install'
+            }
+	    }
 	
-	stage('Test') {
-	    steps {
-		sh '"mvn" -Dmaven.test.failure.ignore test'
-		}
-		
-		post {
-		sh 'find . -name "TEST-*.xml" -exec touch {} \\;'
-		junit '**/build/test-results/test/TEST-*.xml'
-		}
-	}
+	    stage('Test') {
+	        steps {
+		    sh '"mvn" -Dmaven.test.failure.ignore test'
+		    }
+			post {
+		    sh 'find . -name "TEST-*.xml" -exec touch {} \\;'
+		    junit '**/build/test-results/test/TEST-*.xml'
+		    }
+	    }
 	  
-    stage('Deploy') {
-        steps {
-        //deploy war on tomcat server
-        deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://15.207.86.173:8080/')], contextPath: null, war: '**/*.war'
-		}
+        stage('Deploy') {
+            steps {
+//    deploy war on tomcat server
+            deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://15.207.86.173:8080/')], contextPath: null, war: '**/*.war'
+		    }
+        }
     }
 }

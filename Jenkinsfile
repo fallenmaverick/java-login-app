@@ -32,17 +32,31 @@ pipeline {
       }
 	}
 	
-	stage('Test'){
-	    steps {
-		xunit checksName: '', tools: [JUnit(excludesPattern: '', stopProcessingIfError: true)]
+	stage('Test') {
+
+      steps {
+
+        sh '"mvn" -Dmaven.test.failure.ignore test'
+
+      }
+
+      post {
+
+        always{
+
+          junit '**/target/surefire-reports/TEST-*.xml'
+
         }
+
+      }
+
     }
 	
 	  
     stage('Deploy') {
       steps {
         //deploy war on tomcat server
-       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://172.31.41.197:8080/')], contextPath: null, war: '**/*.war'
+       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080/')], contextPath: null, war: '**/*.war'
 
       }
     }

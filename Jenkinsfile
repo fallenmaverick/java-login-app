@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        PATH = "$PATH:/usr/share/maven/bin"
+        PATH = "$PATH:/usr/bin/"
     }
     stages{
        stage('GetCode'){
@@ -16,8 +16,8 @@ pipeline{
         }
         stage('SonarQube analysis') {
             steps{
-		        withSonarQubeEnv('sonarqube-8.9.9') { 
-                   sh "mvn sonar:sonar"
+	        withSonarQubeEnv('sonarqube-8.9.9') { 
+                    sh "mvn sonar:sonar"
             }       
         }
         
@@ -27,5 +27,5 @@ pipeline{
             }
         }
        
-    }
+     }
 }

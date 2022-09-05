@@ -20,13 +20,6 @@ pipeline {
             sh "${mvnHome}/bin/mvn sonar:sonar -f java-login/pom.xml"
         }
             }       
-        }
-        
-        stage('Deploy') {
-            steps {
-                deploy adapters: [tomcat8(credentialsId: 'deploy', path: '', url: 'http://3.108.194.173:8080')], contextPath: null, war: '**/**.war'
-            }
-        }
-       
+        }       
      }
 }

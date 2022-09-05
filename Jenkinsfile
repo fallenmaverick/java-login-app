@@ -33,29 +33,31 @@ pipeline {
 	}
 	
 	stage('Test') {
+            steps {
+                sh 'make test'
 
-      steps {
-
-        sh '"mvn" -Dmaven.test.failure.ignore test'
-       }
-        post {
-
-        always{
-
-          junit '**/target/surefire-reports/TEST-*.xml'
-
+                script {
+                    def testResults = findFiles(glob: 'build/reports/**/*.xml')
+                    for(xml in testResults) {
+                        touch xml.getPath()
+                    
+                }
+            }
         }
-
-      }
-      
-
     }
-	
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            junit 'build/reports/**/*.xml'
+        }
+	}	
+ 
 	  
     stage('Deploy') {
       steps {
         //deploy war on tomcat server
-       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://15.207.86.173:8080')], contextPath: 'java-webapp', war: '**/*.war'
+       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080/')], contextPath: null, war: '**/*.war'
 
       }
     }

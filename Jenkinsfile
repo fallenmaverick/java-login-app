@@ -1,5 +1,7 @@
-pipeline{
+pipeline {
     agent any
+	tools {
+	    maven 'Maven'
     environment {
         PATH = "$PATH:/usr/bin"
     }
@@ -21,7 +23,7 @@ pipeline{
         } 
        stage('Build'){
             steps{
-                sh 'mvn clean package'
+                sh 'mvn clean install'
             }
          }
         stage('Test'){

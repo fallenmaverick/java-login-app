@@ -1,14 +1,14 @@
 pipeline{
     agent any
-	environment{
-		maven "Maven3"
+    environment{
+	    PATH = "/usr/bin:$PATH"
     }
     stages{
        stage('GetCode'){
             steps{
                 git 'https://github.com/fallenmaverick/java-login.git'
             }
-         }        
+       }        
        stage('Build'){
             steps{
                 sh "mvn clean install"

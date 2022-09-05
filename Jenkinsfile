@@ -32,7 +32,7 @@ pipeline {
       }
 
     }
-	  
+
     stage('Deploy') {
       steps {
         //deploy war on tomcat server

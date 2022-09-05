@@ -3,17 +3,22 @@ pipeline{
     environment{
 	    PATH = "/usr/bin:$PATH"
     }
-    stages{
+       stages{
        stage('GetCode'){
             steps{
                 git 'https://github.com/fallenmaverick/java-login.git'
             }
-       }        
-       stage('Build'){
-            steps{
-                sh "mvn clean install"
+       }   
+	    
+       stage ('Build') {
+            steps {
+                sh 'mvn -Dmaven.test.failure.ignore=true install' 
             }
-        }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
+            }
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
             steps{

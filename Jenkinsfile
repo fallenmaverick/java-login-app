@@ -37,18 +37,10 @@ pipeline {
       steps {
 
         sh '"mvn" -Dmaven.test.failure.ignore test'
-
+        junit '**/target/surefire-reports/TEST-*.xml'
       }
 
-      post {
-
-        always{
-
-          junit '**/target/surefire-reports/TEST-*.xml'
-
-        }
-
-      }
+      
 
     }
 	
@@ -56,7 +48,7 @@ pipeline {
     stage('Deploy') {
       steps {
         //deploy war on tomcat server
-       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://15.207.86.173:8080/')], contextPath: null, war: '**/*.war'
+       deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.232.188.67:8080/')], contextPath: null, war: '**/*.war'
 
       }
     }

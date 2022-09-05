@@ -30,19 +30,15 @@ pipeline {
         // Run the maven build
         sh '"mvn" -Dmaven.test.failure.ignore clean install'
       }
+	  post {
+        always {
+            xunit checksName: '', tools: [JUnit(excludesPattern: '', pattern: 'GIT_URL = https://github.com/fallenmaverick/java-login.git/pom.xml', stopProcessingIfError: true)]
+                }
+            }
 
     }
-     stage('Test'){
-        steps{
-            sh 'mvn test'
-            }
-            post {
-                
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-            }
-        }
-    }
+	
+	  
     stage('Deploy') {
       steps {
         //deploy war on tomcat server

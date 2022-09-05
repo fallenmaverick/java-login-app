@@ -32,7 +32,17 @@ pipeline {
       }
 
     }
-
+     stage('Test'){
+        steps{
+            sh 'mvn test'
+            }
+            post {
+                
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
+    }
     stage('Deploy') {
       steps {
         //deploy war on tomcat server
